@@ -30,7 +30,8 @@ Código implementado con Java 17, Spring boot 4.0.5 y Maven 3.9.14
 
 ## Desarrollo
 1. Clone este repositorio.
-2. Inicialice el proyecto
+3. Construya la imagen Docker (docker build -t seti-technicaltest-acme:1.0 .)
+2. Levante el contenedor (docker run -d -p 8080:8080 --name acme-container seti-technicaltest-acme:1.0)
 
 ## Endpoints
 
