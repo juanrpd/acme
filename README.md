@@ -30,9 +30,7 @@ Código implementado con Java 17, Spring boot 4.0.5 y Maven 3.9.14
 
 ## Desarrollo
 1. Clone este repositorio.
-2.
-3.
-4. Inicialice el proyecto
+2. Inicialice el proyecto
 
 ## Endpoints
 
