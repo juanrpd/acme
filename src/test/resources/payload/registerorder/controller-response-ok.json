@@ -1,0 +1,11 @@
+{
+  "dataHeader": {
+    "codigoRespuesta": 200
+  },
+  "data": {
+    "enviarPedidoRespuesta": {
+      "codigoEnvio": "80375472",
+      "estado": "Entregado exitosamente al cliente"
+    }
+  }
+}

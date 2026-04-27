@@ -11,6 +11,7 @@ import com.seti.acme.technicaltest.commons.utils.Constants;
 import com.seti.acme.technicaltest.registerorder.dto.OrderDTO;
 import com.seti.acme.technicaltest.registerorder.dto.RegisterOrderDataDTO;
 import com.seti.acme.technicaltest.registerorder.dto.SendOrderResponseDTO;
+import com.seti.acme.technicaltest.registerorder.dto.exception.RegisterOrderException;
 import com.seti.acme.technicaltest.registerorder.models.RegisterOrderResponse;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -28,6 +29,9 @@ public class RegisterOrderUtil {
 
     public static EnvioPedidoRequest orderDtoToEnvioPedidoRequestMapper(OrderDTO orderDTO){
         EnvioPedidoRequest envioPedidoRequest = new EnvioPedidoRequest();
+        if(Objects.isNull(orderDTO)){
+            throw new RegisterOrderException(null, RegisterOrderUtil.class.getCanonicalName(), Constants.EMPTY_REQUEST);
+        }
         envioPedidoRequest.pedido = orderDTO.getOrderNumber();
         envioPedidoRequest.cantidad = (Objects.nonNull(orderDTO.getOrderQuantity())?Integer.parseInt(orderDTO.getOrderQuantity()):0);
         envioPedidoRequest.ean = orderDTO.getEanCode();
@@ -39,8 +43,10 @@ public class RegisterOrderUtil {
 
     public static SendOrderResponseDTO envioPedidoResponseToSendOrderResponseDTOMapper(EnvioPedidoResponse envioPedidoResponse){
         SendOrderResponseDTO sendOrderResponseDTO = new SendOrderResponseDTO();
-        sendOrderResponseDTO.setSendCode(envioPedidoResponse.getCodigo());
-        sendOrderResponseDTO.setStatus(envioPedidoResponse.getMensaje());
+        if(Objects.nonNull(envioPedidoResponse)){
+            sendOrderResponseDTO.setSendCode(envioPedidoResponse.getCodigo());
+            sendOrderResponseDTO.setStatus(envioPedidoResponse.getMensaje());
+        }
         return sendOrderResponseDTO;
     }
 
@@ -57,8 +63,8 @@ public class RegisterOrderUtil {
             marshaller.marshal(soapEnvelope, stringWriter);
             return stringWriter.toString();
         }catch (JAXBException e){
-            log.error(Constants.ERROR_TO_XML+ e.getMessage());
-            return null;
+            log.error(Constants.LOG_MARK_2, Constants.ERROR_TO_XML, e.getMessage());
+            throw new RegisterOrderException(null, RegisterOrderUtil.class.getCanonicalName(), Constants.ERROR_TO_XML);
         }
     }
 
@@ -70,15 +76,16 @@ public class RegisterOrderUtil {
             SoapResponseEnvelope envelope = (SoapResponseEnvelope) unmarshaller.unmarshal(reader);
             if (envelope.getBody() != null && envelope.getBody().getEnvioPedidoAcmeResponse() != null) {
                 return envelope.getBody().getEnvioPedidoAcmeResponse().getResponse();
+            }else{
+                throw new RegisterOrderException(null, RegisterOrderUtil.class.getCanonicalName(), Constants.ERROR_TO_OBJ);
             }
-            return null;
         }catch (Exception e){
-            log.error(Constants.ERROR_TO_OBJ+ e.getMessage());
-            return null;
+            log.error(Constants.LOG_MARK_2, Constants.ERROR_TO_OBJ, e.getMessage());
+            throw new RegisterOrderException(null, RegisterOrderUtil.class.getCanonicalName(), Constants.ERROR_TO_OBJ);
         }
     }
 
-    public static RegisterOrderResponse buildResponse(Boolean isSuccess, EnvioPedidoResponse envioPedidoResponse){
+    public static RegisterOrderResponse buildResponse(Boolean isSuccess, EnvioPedidoResponse envioPedidoResponse, String detailError){
         RegisterOrderResponse registerOrderResponse = new RegisterOrderResponse();
         RegisterOrderDataDTO registerOrderDataDTO = new RegisterOrderDataDTO();
         DataHeaderResponseTypeDTO dataHeaderResponseTypeDTO = new DataHeaderResponseTypeDTO();
@@ -88,6 +95,7 @@ public class RegisterOrderUtil {
             registerOrderDataDTO.setSendOrderResponseDTO(sendOrderResponseDTO);
             dataHeaderResponseTypeDTO.setResponseCode(200);
         }else{
+            log.error(Constants.LOG_MARK_1, detailError);
             registerOrderDataDTO.setSendOrderResponseDTO(null);
             dataHeaderResponseTypeDTO.setResponseCode(400);
             BusinessErrorTypeDTO businessErrorTypeDTO = BusinessErrorTypeDTO.builder().typeError("ERROR NEGOCIO").messageError("HA OCURRIDO UN ERROR, INTENTE MAS TARDE").build();

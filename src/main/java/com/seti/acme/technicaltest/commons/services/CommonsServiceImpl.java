@@ -1,7 +1,7 @@
 package com.seti.acme.technicaltest.commons.services;
 
-import com.seti.acme.technicaltest.commons.utils.CommonUtil;
 import com.seti.acme.technicaltest.commons.utils.Constants;
+import com.seti.acme.technicaltest.registerorder.dto.exception.RegisterOrderException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,6 +11,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -28,10 +29,13 @@ public class CommonsServiceImpl implements CommonsService {
                     .header(Constants.SOAP_ACTION, Constants.SOAP_ACTION_VAL)
                     .POST(HttpRequest.BodyPublishers.ofString(xml)).build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if(Objects.isNull(response.body())){
+                throw new RegisterOrderException(null, this.getClass().getCanonicalName(), Constants.EMPTY_RESPONSE);
+            }
             return response.body();
         }catch (Exception e){
-            log.error(Constants.CLIENT_ERROR+ e.getMessage());
-            return null;
+            log.error(Constants.LOG_MARK_2, Constants.CLIENT_ERROR, e.getMessage());
+            throw new RegisterOrderException(null, this.getClass().getCanonicalName(), Constants.CLIENT_ERROR);
         }
     }
 }
