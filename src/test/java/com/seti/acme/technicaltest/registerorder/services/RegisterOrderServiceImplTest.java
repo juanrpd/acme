@@ -28,9 +28,7 @@ public class RegisterOrderServiceImplTest {
     private static final String INVALID_XML = "INVALID_XML";
     private static final String NULL_REQUEST = "NULL_REQUEST";
     private static final String NULL_ORDERDTO = "NULL_ORDERDTO";
-
-
-    private static final String XML_INVALID = "payload/registerorder/xml-invalid.txt";
+    
     private static final String OK = "OK";
     private static final String THROW = "THROW";
 
