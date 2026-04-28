@@ -1,8 +1,7 @@
-package com.seti.acme.technicaltest.registerorder;
+package com.seti.acme.technicaltest.registerorder.controller;
 
 import com.seti.acme.technicaltest.commons.utils.CommonUtil;
 import com.seti.acme.technicaltest.commons.utils.Constants;
-import com.seti.acme.technicaltest.registerorder.controller.RegisterOrderController;
 import com.seti.acme.technicaltest.registerorder.models.RegisterOrderResponse;
 import com.seti.acme.technicaltest.registerorder.services.RegisterOrderService;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,12 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import tools.jackson.databind.ObjectMapper;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
