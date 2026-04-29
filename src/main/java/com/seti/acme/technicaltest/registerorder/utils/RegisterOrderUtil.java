@@ -51,10 +51,10 @@ public class RegisterOrderUtil {
     }
 
     public static String convertToXml(EnvioPedidoAcme envioPedidoAcme){
-        SoapEnvelope soapEnvelope = new SoapEnvelope();
-        soapEnvelope.body = new SoapEnvelope.SoapBody();
-        soapEnvelope.body.envioPedidoAcme = envioPedidoAcme;
         try{
+            SoapEnvelope soapEnvelope = new SoapEnvelope();
+            soapEnvelope.body = new SoapEnvelope.SoapBody();
+            soapEnvelope.body.envioPedidoAcme = envioPedidoAcme;
             JAXBContext context = JAXBContext.newInstance(SoapEnvelope.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);

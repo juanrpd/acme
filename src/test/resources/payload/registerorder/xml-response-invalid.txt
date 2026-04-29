@@ -1,0 +1,13 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:env="http://WSDLs/EnvioPedidos/EnvioPedidosAcme">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <env:EnvioSomeOtherThing>
+            <EnvioPedidoResponse>
+                <!--Optional:-->
+                <Codigo>80375472</Codigo>
+                <!--Optional:-->
+                <Mensaje>Entregado exitosamente al cliente</Mensaje>
+            </EnvioPedidoResponse>
+        </env:EnvioSomeOtherThing>
+    </soapenv:Body>
+</soapenv:Envelope>
